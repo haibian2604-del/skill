@@ -54,3 +54,4 @@ pip install pymupdf pypdf
 - 技能命名使用 kebab-case，如 `deploy-to-staging`
 - 触发词与使用边界写在 frontmatter 的 `description` 中
 - 脚本需在 SKILL.md 中注明前置依赖与运行环境
+- **每次新增技能后，必须在同一提交中更新上方「包含技能」表格**：添加新技能的名称、链接与一句作用简介；删除技能时同步移除对应行
