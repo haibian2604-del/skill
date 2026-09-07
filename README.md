@@ -28,6 +28,12 @@ description: 一句话说明技能用途与触发时机
 ...
 ```
 
+## 包含技能
+
+| 技能 | 说明 |
+|------|------|
+| [resume-master](./resume-master/) | 一站式简历编写：HTML 源文件 + 一页式 PDF 导出，支持从零创建与按 JD 改旧简历。参考 [wangyafu/resume-skills](https://github.com/wangyafu/resume-skills) |
+
 ## 安装方式
 
 将技能目录克隆或复制到 `~/.workbuddy/skills/` 即可全局使用：
@@ -35,6 +41,12 @@ description: 一句话说明技能用途与触发时机
 ```bash
 git clone git@github.com:haibian2604-del/skill.git
 cp -r skill/<skill-name> ~/.workbuddy/skills/
+```
+
+简历技能还需安装 Python 依赖（PDF 拆图与页数统计）：
+
+```bash
+pip install pymupdf pypdf
 ```
 
 ## 约定
