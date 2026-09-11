@@ -1,0 +1,58 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:01-Wiki/summaries",
+      "color": {
+        "a": 1,
+        "rgb": 15764480
+      }
+    },
+    {
+      "query": "path:01-Wiki/entities",
+      "color": {
+        "a": 1,
+        "rgb": 1667522
+      }
+    },
+    {
+      "query": "path:01-Wiki/concepts",
+      "color": {
+        "a": 1,
+        "rgb": 3120708
+      }
+    },
+    {
+      "query": "path:02-Rules",
+      "color": {
+        "a": 1,
+        "rgb": 10237621
+      }
+    },
+    {
+      "query": "path:00-Raw",
+      "color": {
+        "a": 1,
+        "rgb": 8818326
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": true
+}

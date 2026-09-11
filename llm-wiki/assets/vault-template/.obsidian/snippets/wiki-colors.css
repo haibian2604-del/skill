@@ -1,0 +1,105 @@
+/* ============================================================
+   LLM Wiki 知识库 - 分类颜色体系
+   配套文档：[[02-Rules/分类体系]] §8 颜色约定
+   生效方式：设置 → 外观 → CSS 代码片段 → 启用 wiki-colors
+   ============================================================ */
+
+/* ---------- 一、按页面类型给文件图标染色（文件管理器） ---------- */
+/* summaries 摘要页：橙色 */
+.tree-item-self[data-path^="01-Wiki/summaries/"] .tree-item-icon,
+.nav-file-title[data-path^="01-Wiki/summaries/"] .nav-file-icon {
+  color: #f08c00 !important;
+}
+/* entities 实体页：蓝色 */
+.tree-item-self[data-path^="01-Wiki/entities/"] .tree-item-icon,
+.nav-file-title[data-path^="01-Wiki/entities/"] .nav-file-icon {
+  color: #1971c2 !important;
+}
+/* concepts 概念页：绿色 */
+.tree-item-self[data-path^="01-Wiki/concepts/"] .tree-item-icon,
+.nav-file-title[data-path^="01-Wiki/concepts/"] .nav-file-icon {
+  color: #2f9e44 !important;
+}
+/* 规则层文件：紫色 */
+.tree-item-self[data-path^="02-Rules/"] .tree-item-icon,
+.nav-file-title[data-path^="02-Rules/"] .nav-file-icon {
+  color: #9c36b5 !important;
+}
+
+/* ---------- 二、按 domain 给标签染色（正文中的 #标签） ---------- */
+/* 技术/AI：蓝色 */
+.tag[href="#tech"] { background-color: #1971c2; color: #fff; }
+/* 产品/设计：紫色 */
+.tag[href="#product"] { background-color: #9c36b5; color: #fff; }
+/* 商业/投资：橙色 */
+.tag[href="#business"] { background-color: #e8590c; color: #fff; }
+/* 学术/研究：青色 */
+.tag[href="#academic"] { background-color: #0c8599; color: #fff; }
+/* 生活/健康：绿色 */
+.tag[href="#life"] { background-color: #2f9e44; color: #fff; }
+/* 阅读/人文：玫红 */
+.tag[href="#reading"] { background-color: #e64980; color: #fff; }
+/* 其他：灰色 */
+.tag[href="#other"] { background-color: #868e96; color: #fff; }
+
+/* ---------- 三、主题标签（细分主题）浅色系，与 domain 区分 ---------- */
+.tag[href="#rag"],
+.tag[href="#llm"],
+.tag[href="#langchain"] { background-color: #4dabf7; color: #fff; }
+.tag[href="#llamaindex"] { background-color: #6741d9; color: #fff; }
+
+.tag[href="#chunking"] { background-color: #69db7c; color: #1a1a1a; }
+.tag[href="#vector-db"] { background-color: #ffa94d; color: #1a1a1a; }
+.tag[href="#document"] { background-color: #d0bfff; color: #1a1a1a; }
+.tag[href="#retrieval"] { background-color: #3bc9db; color: #1a1a1a; }
+.tag[href="#mcp"] { background-color: #9775fa; color: #fff; }
+.tag[href="#fastmcp"] { background-color: #b197fc; color: #1a1a1a; }
+.tag[href="#agent"] { background-color: #ff8787; color: #1a1a1a; }
+.tag[href="#protocol"] { background-color: #748ffc; color: #fff; }
+.tag[href="#python"] { background-color: #74c0fc; color: #1a1a1a; }
+.tag[href="#skills"] { background-color: #faa2c1; color: #1a1a1a; }
+.tag[href="#context-engineering"] { background-color: #96f2d7; color: #1a1a1a; }
+.tag[href="#react"] { background-color: #ffd43b; color: #1a1a1a; }
+.tag[href="#framework"] { background-color: #a9e34b; color: #1a1a1a; }
+
+/* ---------- 四、页面内标题色带：区分三类页面 ---------- */
+/* 摘要页标题：橙色 */
+.markdown-preview-view[data-path*="/summaries/"] h1,
+.markdown-source-view[data-path*="/summaries/"] h1 { color: #f08c00; }
+/* 实体页标题：蓝色 */
+.markdown-preview-view[data-path*="/entities/"] h1,
+.markdown-source-view[data-path*="/entities/"] h1 { color: #1971c2; }
+/* 概念页标题：绿色 */
+.markdown-preview-view[data-path*="/concepts/"] h1,
+.markdown-source-view[data-path*="/concepts/"] h1 { color: #2f9e44; }
+
+/* ---------- 五、Dataview 表格中 domain 列的标签着色 ---------- */
+.dataview .tag[href="#tech"] { background-color: #1971c2; color: #fff; }
+.dataview .tag[href="#product"] { background-color: #9c36b5; color: #fff; }
+.dataview .tag[href="#business"] { background-color: #e8590c; color: #fff; }
+.dataview .tag[href="#academic"] { background-color: #0c8599; color: #fff; }
+.dataview .tag[href="#life"] { background-color: #2f9e44; color: #fff; }
+.dataview .tag[href="#reading"] { background-color: #e64980; color: #fff; }
+.dataview .tag[href="#other"] { background-color: #868e96; color: #fff; }
+.tag[href="#harness"] { background-color: #da77f2; color: #1a1a1a; }
+.tag[href="#loop-engineering"] { background-color: #fcc419; color: #1a1a1a; }
+.tag[href="#workflow"] { background-color: #38d9a9; color: #1a1a1a; }
+.tag[href="#spring"] { background-color: #94d82d; color: #1a1a1a; }
+.tag[href="#ioc"] { background-color: #63e6be; color: #1a1a1a; }
+.tag[href="#aop"] { background-color: #ffa8a8; color: #1a1a1a; }
+.tag[href="#java"] { background-color: #ffc078; color: #1a1a1a; }
+.tag[href="#design-pattern"] { background-color: #b197fc; color: #1a1a1a; }
+.tag[href="#transaction"] { background-color: #e599f7; color: #1a1a1a; }
+.tag[href="#mybatis"] { background-color: #99e9f2; color: #1a1a1a; }
+.tag[href="#rate-limit"] { background-color: #ffe066; color: #1a1a1a; }
+.tag[href="#high-availability"] { background-color: #ffc9c9; color: #1a1a1a; }
+.tag[href="#system-design"] { background-color: #b2f2bb; color: #1a1a1a; }
+.tag[href="#interview"] { background-color: #e5dbff; color: #1a1a1a; }
+.tag[href="#coding-habits"] { background-color: #ffec99; color: #1a1a1a; }
+.tag[href="#docker"] { background-color: #66d9e8; color: #1a1a1a; }
+.tag[href="#kubernetes"] { background-color: #5c7cfa; color: #fff; }
+.tag[href="#container"] { background-color: #8ce99a; color: #1a1a1a; }
+.tag[href="#devops"] { background-color: #ffa8a8; color: #1a1a1a; }
+.tag[href="#ai-coding"] { background-color: #d0ebff; color: #1a1a1a; }
+.tag[href="#vibe-coding"] { background-color: #ffb3d9; color: #1a1a1a; }
+.tag[href="#graphrag"] { background-color: #c2255c; color: #fff; }
