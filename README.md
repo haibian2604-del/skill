@@ -35,6 +35,7 @@ description: 一句话说明技能用途与触发时机
 | [resume-master](./resume-master/) | 一站式简历编写：HTML 源文件 + 一页式 PDF 导出，支持从零创建与按 JD 改旧简历。参考 [wangyafu/resume-skills](https://github.com/wangyafu/resume-skills) |
 | [project-to-resume](./project-to-resume/) | 把代码仓库、README、架构图（图片或 HTML 页面）或口述材料转化为简历项目经历，输出标准版/精简版/深度版三套文案，可选按 JD 定制 |
 | [llm-wiki](./llm-wiki/) | 搭建与维护 Karpathy 方法论的 LLM Wiki 知识库（Obsidian vault）：三层架构 00-Raw/01-Wiki/02-Rules、页面模板、分类体系、Obsidian 配色与图谱配置，支持脚手架创建 + ingest/query/lint 维护 |
+| [skill-usage](./skill-usage/) | 查询某个已安装 Skill 的用法：定位 SKILL.md 后按固定结构输出作用、触发方式、输入要求、流程、产出物、依赖与坑；也可列出全部已安装技能（含脚本 find_skill.py） |
 
 ## 安装方式
 
