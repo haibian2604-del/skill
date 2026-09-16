@@ -278,10 +278,11 @@
       var ph = TAU * (((t + (a.phaseMs || 0)) % per) / per) + (a.phase || 0);
       return a.amp * Math.tanh(2.8 * Math.sin(ph));
     },
-    /* 周期闭合：interval 内前 dur 毫秒闭合再睁开；相位混入实例种子避免多实例同步 */
+    /* 周期闭合：interval 内前 dur 毫秒闭合再睁开；相位混入实例种子避免多实例同步
+     *（静态渲染时不吃种子，保证缩略图是确定的一帧，不会碰巧截在眨眼半途） */
     blink: function (a, t, eng) {
       var interval = a.interval || 3800, dur = a.dur || 200;
-      var p = (t + (a.phaseMs || 0) + (eng ? eng._seed * 97 : 0)) % interval;
+      var p = (t + (a.phaseMs || 0) + (eng && eng._active ? eng._seed * 97 : 0)) % interval;
       if (p >= dur) return 0;
       return -(a.depth == null ? 1 : a.depth) * Math.sin(Math.PI * (p / dur));
     }
