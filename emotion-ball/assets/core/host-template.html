@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: {{BG}}; color: {{INK}}; font-family: -apple-system, 'Noto Sans SC', system-ui, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  }
+  #bot { width: {{SIZE}}px; height: {{SIZE}}px; cursor: pointer; }
+  .hud { font-size: 13px; opacity: .7; text-align: center; }
+  .hud code { font-family: ui-monospace, Menlo, monospace; }
+</style>
+</head>
+<body>
+  <!-- 小球容器：宽高即小球尺寸，建议 ≥120px；小尺寸请配 eyeScale -->
+  <div id="bot" role="img" aria-label="{{LABEL}}"></div>
+  <p class="hud">移动鼠标它会注视你 · 点一下自旋甩彩带<br>
+     <code>ball.handleAIMessage('{"emotionId":"30","tips":"正在思考"}')</code></p>
+
+  <script src="eb-core.js"></script>
+  <script src="eb-emotions.js"></script>
+  <script>
+    var ball = EmotionBall.create('#bot', {
+      emotion: '{{EMOTION}}',   /* 初始表情 ID；切换用 ball.setEmotion('34') */
+      shape: '{{SHAPE}}',       /* blob 圆胖 / wedge 三角 / gem 菱形 */
+      idle: true{{THEME_OPT}}
+    });
+
+    /* ---- 宿主接线：注视 / 点击 / AI 消息 ---- */
+    var el = document.getElementById('bot');
+    addEventListener('pointermove', function (e) {
+      var r = el.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      ball.setGaze(
+        Math.max(-1, Math.min(1, (e.clientX - cx) / 300)),
+        Math.max(-1, Math.min(1, (e.clientY - cy) / 300))
+      );
+    });
+    el.addEventListener('click', function () { ball.spin(2); });
+
+    /* AI 只输出一个 emotionId 即可切换表情；未知 ID / 坏 JSON 会自动回退 */
+    ball.on('change', function (e) { console.log('[emotion]', e.id, e.def.name); });
+    ball.on('tips', function (e) { console.log('[tips]', e.text); });
+    ball.on('error', function (e) { console.warn('[emotion-error]', e.message); });
+
+    /* ---- 演示：走一遍常用代理状态 ---- */
+    var demo = ['30', '40', '39', '33', '34', '35'];
+    var di = 0;
+    setInterval(function () {
+      di = (di + 1) % demo.length;
+      ball.handleAIMessage({ emotionId: demo[di], tips: '演示 ' + demo[di] });
+    }, 3000);
+  </script>
+</body>
+</html>

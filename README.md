@@ -46,6 +46,7 @@ description: 一句话说明技能用途与触发时机
 | [project-to-resume](./project-to-resume/) | 把代码仓库、README、架构图（图片或 HTML 页面）或口述材料转化为简历项目经历，输出标准版/精简版/深度版三套文案，可选按 JD 定制 | `/project-to-resume`、把项目写成简历经历、项目经历怎么描述、简历项目润色 |
 | [llm-wiki](./llm-wiki/) | 搭建与维护 Karpathy 方法论的 LLM Wiki 知识库（Obsidian vault）：三层架构 00-Raw/01-Wiki/02-Rules、页面模板、分类体系、Obsidian 配色与图谱配置，支持脚手架创建 + ingest/query/lint 维护 | LLM Wiki、创建知识库、obsidian 知识库、ingest 摄入资料、lint 知识库 |
 | [skill-usage](./skill-usage/) | 查询某个已安装 Skill 的用法：定位 SKILL.md 后按固定结构输出作用、触发方式、输入要求、流程、产出物、依赖与坑；也可列出全部已安装技能（含脚本 find_skill.py） | X 技能怎么用、/xxx 是干什么的、有哪些 skill |
+| [emotion-ball](./emotion-ball/) | 制作「会表达情绪的小球」——纯 SVG + 原生 JS 的零依赖表情引擎（32 种状态表情、emotionId 对接 AI、鼠标注视、自旋彩带、撒花），含可运行核心、脚手架脚本与行为断言测试台；可作 Agent 状态指示、桌面宠物、悬浮助手 | 情绪小球、表情球、AI 表情、桌面宠物、Agent 状态指示、emotionId、怎么做会表达情绪的小球 |
 
 ## 安装方式
 
@@ -78,7 +79,7 @@ cd skill
 
 # 2. 复制需要的技能到用户级技能目录（可一次复制多个）
 mkdir -p ~/.workbuddy/skills
-cp -r resume-master project-to-resume llm-wiki skill-usage ~/.workbuddy/skills/
+cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball ~/.workbuddy/skills/
 ```
 
 ### 方式三：官方推荐市场安装
@@ -89,7 +90,7 @@ cp -r resume-master project-to-resume llm-wiki skill-usage ~/.workbuddy/skills/
 
 ```bash
 cd skill && git pull
-cp -r resume-master project-to-resume llm-wiki skill-usage ~/.workbuddy/skills/
+cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball ~/.workbuddy/skills/
 ```
 
 或直接对 Agent 说：「更新 ~/.workbuddy/skills/ 里的 llm-wiki 技能，源仓库是 git@github.com:haibian2604-del/skill.git」。

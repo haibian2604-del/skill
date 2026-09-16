@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Emotion Ball · 行为断言测试台</title>
+<style>body{font:13px/1.6 ui-monospace,Menlo,monospace;padding:16px}#out{white-space:pre}</style>
+</head>
+<body>
+<pre id="out">running…</pre>
+<script>
+/* ============================================================
+ * 时间旅行测试台：用同步时钟驱动 rAF，跑固定帧数后断言 DOM 状态。
+ * 必须在 eb-core.js 之前执行：patch requestAnimationFrame + performance.now。
+ * 输出全部以 RESULT 开头，配合 `chrome --headless --dump-dom | grep RESULT` 使用。
+ * ============================================================ */
+(function () {
+  var vnow = 1000, cb = null, log = [];
+  window.requestAnimationFrame = function (fn) { cb = fn; return 1; };
+  window.cancelAnimationFrame = function () {};
+  performance.now = function () { return vnow; };
+  window.setInterval = function () { return 0; };   /* 巡演计时器不参与测试 */
+
+  window.__ebStep = function (n) {
+    for (var i = 0; i < n; i++) {
+      vnow += 16.7;
+      if (cb) { var f = cb; cb = null; f(vnow); }
+    }
+  };
+  window.__ebReport = function (key, value) { log.push('RESULT ' + key + '=' + value); };
+  window.__ebFlush = function () { document.getElementById('out').textContent = log.join('\n'); };
+  window.__ebLog = log;
+})();
+</script>
+<script src="eb-core.js"></script>
+<script src="eb-emotions.js"></script>
+<script>
+(function () {
+  var step = window.__ebStep, report = window.__ebReport;
+  function mk(id, opts) {
+    var d = document.createElement('div');
+    d.style.width = '160px'; d.style.height = '160px';
+    document.body.appendChild(d);
+    return EmotionBall.create(d, Object.assign({ emotion: id }, opts || {}));
+  }
+  function trails(b) {
+    var n = 0;
+    b.getSVG().querySelectorAll('path[fill^="url"]').forEach(function (p) {
+      if ((p.getAttribute('d') || '').length > 20) n++;
+    });
+    return n;
+  }
+
+  /* 1) 常驻环带：思考中应生成彩带拖尾 */
+  var a = mk('30');
+  step(180);
+  report('orbit_trail_paths', trails(a));
+
+  /* 2) 一次性事件：任务完成撒花，1s 后自然耗尽 */
+  var b = mk('02');
+  step(30);
+  b.setEmotion('33');
+  step(20);
+  report('confetti_nodes', b.getSVG().querySelectorAll('rect,circle').length);
+  step(140);
+  report('confetti_after_decay', b.getSVG().querySelectorAll('rect,circle').length);
+
+  /* 3) 自旋甩带 */
+  var c = mk('02');
+  step(30);
+  c.spin(2);
+  var maxT = 0;
+  for (var i = 0; i < 40; i++) { step(1); maxT = Math.max(maxT, trails(c)); }
+  report('spin_trail_max', maxT);
+
+  /* 4) 绕到背面眼睛应隐藏 */
+  var d = mk('02');
+  step(10);
+  d.spin(1, 1);
+  var hidden = false;
+  for (var j = 0; j < 200; j++) {
+    step(1);
+    d.getSVG().querySelectorAll('g path[fill="#1A1A1A"]').forEach(function (p) {
+      if (p.style.display === 'none') hidden = true;
+    });
+  }
+  report('eye_hidden_on_backspin', hidden);
+
+  /* 5) sequence settle:{next} 应自动切到待机 */
+  var e = mk('01');
+  step(200);
+  report('wake_settle_next', e.emotionId);
+
+  /* 6) 三条失败路径都必须回退、不白屏 */
+  var f = mk('02'), errs = 0;
+  f.on('error', function () { errs++; });
+  f.handleAIMessage('{"emotionId":"99"}');
+  f.handleAIMessage('不是 JSON');
+  f.handleAIMessage({});
+  step(10);
+  report('fallback_errors', errs);
+  report('fallback_emotion', f.emotionId);
+
+  /* 7) 眨眼（开心会眨）与睡眠（不眨）对比 */
+  function openRange(id) {
+    var g = mk(id), mn = 9, mx = -9;
+    step(20);
+    for (var m = 0; m < 400; m++) {
+      step(1);
+      var p = g._lastPose;
+      if (p.left.open < mn) mn = p.left.open;
+      if (p.left.open > mx) mx = p.left.open;
+    }
+    return mn.toFixed(2) + '~' + mx.toFixed(2);
+  }
+  report('blink_open_happy', openRange('10'));
+  report('blink_open_sleep', openRange('00'));
+
+  /* 8) 配置注册中心：种子数量 / 校验拒绝 / JSON 导入 */
+  report('seed_count', EmotionBall.config.ids().length);
+  var bad = EmotionBall.config.register({ id: '50', name: '测试', group: 'custom', anims: [{ type: 'nope' }] });
+  report('invalid_anim_rejected', !bad.ok);
+  report('import_added', EmotionBall.config.importConfig('[{"id":"51","name":"导入","group":"custom"}]').added);
+
+  /* 9) 静态渲染（缩略图路径）不应创建 rAF 循环 */
+  var h = mk('13', { autostart: false });
+  report('renderStatic_roundtrip', typeof h.getSVG().outerHTML === 'string' && h.getSVG().outerHTML.length > 500);
+
+  window.__ebFlush();
+})();
+</script>
+</body>
+</html>

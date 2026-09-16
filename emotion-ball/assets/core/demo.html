@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion Ball · 会表达情绪的小球</title>
+<style>
+  :root {
+    --bg: #F7F5F1; --panel: #FFFFFF; --ink: #1F1D1A; --dim: #6B6660;
+    --line: #E3DED6; --accent: #54B9A6;
+  }
+  [data-theme="dark"] {
+    --bg: #141414; --panel: #1C1B1A; --ink: #F2EFEA; --dim: #9A948C;
+    --line: #2E2C2A; --accent: #54B9A6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Space Grotesk', 'Noto Sans SC', -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 72px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: .2px; }
+  .sub { color: var(--dim); font-size: 13px; margin: 6px 0 0; }
+  button {
+    font: inherit; color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .hero { display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: center; margin: 36px 0 28px; }
+  .hero-ball { width: 280px; height: 280px; cursor: pointer; }
+  .hero-meta .id { font-size: 12px; letter-spacing: .16em; color: var(--dim); text-transform: uppercase; }
+  .hero-meta h2 { font-size: 30px; margin: 8px 0 10px; }
+  .hero-meta p { color: var(--dim); font-size: 14px; line-height: 1.7; margin: 0 0 16px; max-width: 46ch; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tips { min-height: 20px; font-size: 13px; color: var(--accent); margin-top: 12px; }
+
+  .board { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; margin-bottom: 28px; }
+  .board h3 { margin: 0 0 12px; font-size: 13px; letter-spacing: .12em; color: var(--dim); text-transform: uppercase; }
+  input[type="text"] {
+    width: 100%; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink);
+  }
+
+  .tabs { display: flex; gap: 8px; margin: 0 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 10px; text-align: center; cursor: pointer; transition: border-color .16s, transform .16s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .thumb { width: 100%; aspect-ratio: 1; }
+  .card .n { font-size: 13px; margin-top: 6px; }
+  .card .i { font-size: 11px; color: var(--dim); letter-spacing: .1em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>会表达情绪的小球</h1>
+      <p class="sub">纯 SVG 实时驱动 · 一个 emotionId 即可接入 AI · 移动鼠标它会注视你</p>
+    </div>
+    <div class="row">
+      <button id="themeBtn">切换主题</button>
+      <button id="tourBtn">自动巡演</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div id="heroBall" class="hero-ball" title="点一下：自旋甩彩带"></div>
+    <div class="hero-meta">
+      <div class="id" id="emoId">ID 02</div>
+      <h2 id="emoName">待机放空</h2>
+      <p id="emoDesc"></p>
+      <div class="row">
+        <button data-act="spin">自旋</button>
+        <button data-act="burst">撒花</button>
+        <button data-act="bounce">弹跳</button>
+        <button data-act="sketch">线稿</button>
+      </div>
+      <div class="tips" id="tips"></div>
+    </div>
+  </section>
+
+  <div class="board">
+    <h3>AI 对接模拟 · handleAIMessage</h3>
+    <input id="aiInput" type="text" spellcheck="false"
+           value='{"emotionId":"30","tips":"正在思考用户问题"}'>
+    <div class="row" style="margin-top:12px">
+      <button id="aiSend" class="on">下发 JSON</button>
+      <button data-preset='{"emotionId":"40","tips":"正在检索资料"}'>示例：检索资料</button>
+      <button data-preset='{"emotionId":"33","tips":"任务已完成"}'>示例：任务完成</button>
+      <button data-preset='{"emotionId":"34","tips":"出错了"}'>示例：出错</button>
+      <button data-preset='{"emotionId":"99"}'>示例：未知 ID（应回退）</button>
+      <button data-preset='不是 JSON'>示例：坏 JSON（应回退）</button>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="eb-core.js"></script>
+<script src="eb-emotions.js"></script>
+<script>
+(function () {
+  var EB = window.EmotionBall;
+
+  /* ---------- 主舞台 ---------- */
+  var hero = EB.create('#heroBall', { emotion: '02', idle: true });
+  var elId = document.getElementById('emoId');
+  var elName = document.getElementById('emoName');
+  var elDesc = document.getElementById('emoDesc');
+  var elTips = document.getElementById('tips');
+
+  function paint(def) {
+    elId.textContent = 'ID ' + def.id;
+    elName.textContent = def.name + (def.en ? ' · ' + def.en.name : '');
+    elDesc.textContent = def.desc || '';
+  }
+  hero.on('change', function (e) { paint(e.def); });
+  hero.on('tips', function (e) {
+    elTips.textContent = 'tips：' + e.text;
+    clearTimeout(paint._t);
+    paint._t = setTimeout(function () { elTips.textContent = ''; }, 3000);
+  });
+  hero.on('error', function (e) {
+    elTips.textContent = '⚠ ' + e.message;
+    clearTimeout(paint._t);
+    paint._t = setTimeout(function () { elTips.textContent = ''; }, 3000);
+  });
+  paint(EB.config.get('02'));
+
+  /* 鼠标注视：宿主换算归一化坐标，引擎内部已做球面投影与平滑 */
+  addEventListener('pointermove', function (e) {
+    var r = document.getElementById('heroBall').getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    hero.setGaze(
+      Math.max(-1, Math.min(1, (e.clientX - cx) / 300)),
+      Math.max(-1, Math.min(1, (e.clientY - cy) / 300))
+    );
+  });
+  document.getElementById('heroBall').addEventListener('click', function () { hero.spin(2); });
+
+  /* ---------- 控制按钮 ---------- */
+  document.querySelectorAll('[data-act]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var a = btn.dataset.act;
+      if (a === 'spin') hero.spin(2);
+      if (a === 'burst') hero.burst(24);
+      if (a === 'bounce') hero.bounce();
+      if (a === 'sketch') {
+        var on = btn.classList.toggle('on');
+        hero.setStyle({ sketch: on ? 1 : 0 });
+      }
+    });
+  });
+
+  var tourBtn = document.getElementById('tourBtn');
+  tourBtn.addEventListener('click', function () {
+    if (hero.touring) { hero.stopTour(); tourBtn.classList.remove('on'); }
+    else { hero.startTour(['00', '10', '13', '21', '30', '33', '34', '40'], 2200); tourBtn.classList.add('on'); }
+  });
+
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ---------- AI 下发 ---------- */
+  var aiInput = document.getElementById('aiInput');
+  document.getElementById('aiSend').addEventListener('click', function () {
+    hero.handleAIMessage(aiInput.value);
+  });
+  document.querySelectorAll('[data-preset]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      aiInput.value = b.dataset.preset;
+      hero.handleAIMessage(b.dataset.preset);
+    });
+  });
+
+  /* ---------- 缩略图墙：静态渲染省电，悬停才进动画 ---------- */
+  var tabs = document.getElementById('tabs');
+  var grid = document.getElementById('grid');
+  var cards = {};
+
+  function renderGrid(group) {
+    grid.innerHTML = '';
+    cards = {};
+    EB.config.list(group).forEach(function (def) {
+      var card = document.createElement('div');
+      card.className = 'card';
+      var box = document.createElement('div');
+      box.className = 'thumb';
+      card.appendChild(box);
+      var n = document.createElement('div');
+      n.className = 'n';
+      n.textContent = def.name;
+      var i = document.createElement('div');
+      i.className = 'i';
+      i.textContent = 'ID ' + def.id;
+      card.appendChild(n); card.appendChild(i);
+      card.addEventListener('click', function () { hero.setEmotion(def.id); });
+      grid.appendChild(card);
+      var b = EB.create(box, { emotion: def.id, autostart: false });
+      cards[def.id] = b;
+      card.addEventListener('pointerenter', function () { b.setActive(true); });
+      card.addEventListener('pointerleave', function () { b.setActive(false); });
+    });
+  }
+
+  var groups = [{ key: '', name: '全部' }].concat(EB.config.groups());
+  groups.forEach(function (g, gi) {
+    if (g.key === 'custom') return;
+    var btn = document.createElement('button');
+    btn.textContent = g.name;
+    if (gi === 0) btn.classList.add('on');
+    btn.addEventListener('click', function () {
+      tabs.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+      btn.classList.add('on');
+      renderGrid(g.key);
+    });
+    tabs.appendChild(btn);
+  });
+  renderGrid('');
+})();
+</script>
+</body>
+</html>
