@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logo 变体展示 — {{PROJECT_NAME}}</title>
+<style>
+  :root { --ink: #111; --muted: #666; --bg: #fafafa; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Segoe UI", sans-serif;
+         background: var(--bg); color: var(--ink); padding: 48px 24px; }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 20px; max-width: 1080px; }
+  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 16px;
+          padding: 24px; display: flex; flex-direction: column; gap: 16px;
+          transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+  .card:hover { transform: translateY(-4px);
+                box-shadow: 0 12px 32px rgba(0,0,0,.08); }
+  .card svg { width: 128px; height: 128px; margin: 0 auto; color: var(--ink);
+              transition: color .25s ease; }
+  .card:hover svg { color: {{HOVER_COLOR}}; }
+  .name { font-size: 14px; font-weight: 600; }
+  .family { font-size: 11px; color: var(--muted); text-transform: uppercase;
+            letter-spacing: .08em; }
+  .why { font-size: 12.5px; line-height: 1.6; color: #555; }
+</style>
+</head>
+<body>
+  <h1>{{PROJECT_NAME}} — Logo 变体</h1>
+  <p class="sub">6 个方向，形状优先（单色）。挑 2–3 个进入收敛迭代。</p>
+  <div class="grid">
+    <!--VARIANTS-->
+    <!-- 每个变体一张卡片，格式：
+    <div class="card">
+      <svg viewBox="0 0 100 100">…（currentColor 绘制）…</svg>
+      <div><div class="family">范式家族</div><div class="name">变体名</div></div>
+      <p class="why">一句设计理由：它抽象了主题的什么。</p>
+    </div>
+    -->
+  </div>
+</body>
+</html>
