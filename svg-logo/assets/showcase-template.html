@@ -10,17 +10,27 @@
   body { font-family: -apple-system, "PingFang SC", "Segoe UI", sans-serif;
          background: var(--bg); color: var(--ink); padding: 48px 24px; }
   h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .sub { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-          gap: 20px; max-width: 1080px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  .route { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px;
+           color: var(--muted); margin-bottom: 32px; }
+  .route .swatch { width: 14px; height: 14px; border-radius: 4px;
+                   border: 1px solid rgba(0,0,0,.08); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+          gap: 20px; max-width: 1120px; }
   .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 16px;
-          padding: 24px; display: flex; flex-direction: column; gap: 16px;
+          overflow: hidden; display: flex; flex-direction: column;
           transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
   .card:hover { transform: translateY(-4px);
-                box-shadow: 0 12px 32px rgba(0,0,0,.08); }
-  .card svg { width: 128px; height: 128px; margin: 0 auto; color: var(--ink);
-              transition: color .25s ease; }
-  .card:hover svg { color: {{HOVER_COLOR}}; }
+                box-shadow: 0 12px 32px rgba(0,0,0,.10); }
+  .stage { height: 170px; display: flex; align-items: center; justify-content: center;
+           background: {{BG_LIGHT}}; }
+  .stage svg { width: 120px; height: 120px; transition: transform .25s ease; }
+  .card:hover .stage svg { transform: scale(1.06); }
+  .dark-strip { height: 56px; display: flex; align-items: center; gap: 10px;
+                padding: 0 16px; background: {{BG_DARK}}; }
+  .dark-strip svg { width: 32px; height: 32px; }
+  .dark-strip .hint { color: rgba(255,255,255,.66); font-size: 11px; }
+  .meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
   .name { font-size: 14px; font-weight: 600; }
   .family { font-size: 11px; color: var(--muted); text-transform: uppercase;
             letter-spacing: .08em; }
@@ -29,14 +39,31 @@
 </head>
 <body>
   <h1>{{PROJECT_NAME}} — Logo 变体</h1>
-  <p class="sub">6 个方向，形状优先（单色）。挑 2–3 个进入收敛迭代。</p>
+  <p class="sub">6 个方向 · 配色路线「{{ROUTE_NAME}}」 · 挑 2–3 个进入收敛迭代。</p>
+  <div class="route">
+    路线色板：
+    <span class="swatch" style="background:{{C_SIGNATURE}}" title="签名色 {{C_SIGNATURE}}"></span>
+    <span class="swatch" style="background:{{C_PRIMARY}}" title="主色 {{C_PRIMARY}}"></span>
+    <span class="swatch" style="background:{{C_SECONDARY}}" title="次色 {{C_SECONDARY}}"></span>
+    <span class="swatch" style="background:{{C_ACCENT}}" title="强调色 {{C_ACCENT}}"></span>
+    <span class="swatch" style="background:{{BG_DARK}}" title="深底 {{BG_DARK}}"></span>
+  </div>
   <div class="grid">
     <!--VARIANTS-->
     <!-- 每个变体一张卡片，格式：
     <div class="card">
-      <svg viewBox="0 0 100 100">…（currentColor 绘制）…</svg>
-      <div><div class="family">范式家族</div><div class="name">变体名</div></div>
-      <p class="why">一句设计理由：它抽象了主题的什么。</p>
+      <div class="stage">
+        <svg viewBox="0 0 100 100">…（用路线 hex 直接着色）…</svg>
+      </div>
+      <div class="dark-strip">
+        <svg viewBox="0 0 100 100">…（深底版：ink 底上的配色调整）…</svg>
+        <span class="hint">深底预览</span>
+      </div>
+      <div class="meta">
+        <div class="family">范式家族</div>
+        <div class="name">变体名</div>
+        <p class="why">一句设计理由：它抽象了主题的什么。</p>
+      </div>
     </div>
     -->
   </div>
