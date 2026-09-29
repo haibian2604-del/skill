@@ -434,7 +434,7 @@ def main() -> int:
     print("1. 从目录结构挑 3-6 个核心模块，Read 路由/控制器/服务层/数据模型源码，为每个核心点配对「问题 + 方法」")
     print("2. 填六要素：项目名称 / 项目地址 / 开发时间 / 技术栈 / 核心模块 / 核心点")
     print("3. 缺失信息一次性向用户追问；量化数据无来源时用 [待补充：xxx] 占位符")
-    print("4. 按 references/writing-guide.md 的规格生成简洁版 / 均衡版 / 详细版")
+    print("4. 按 references/writing-guide.md 的规格生成均衡版 / 简洁版")
     return 0
 
 
