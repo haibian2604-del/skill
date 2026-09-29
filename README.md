@@ -43,7 +43,7 @@ description: 一句话说明技能用途与触发时机
 | 技能 | 说明 | 触发词 / 调用 |
 |------|------|------|
 | [resume-master](./resume-master/) | 一站式简历编写：HTML 源文件 + 一页式 PDF 导出，支持从零创建与按 JD 改旧简历。参考 [wangyafu/resume-skills](https://github.com/wangyafu/resume-skills) | 写简历、改简历、优化简历、导出简历 PDF、根据 JD 改简历 |
-| [project-to-resume](./project-to-resume/) | 把代码仓库、README、架构图（图片或 HTML 页面）或口述材料转化为简历项目经历，输出标准版/精简版/深度版三套文案，可选按 JD 定制 | `/project-to-resume`、把项目写成简历经历、项目经历怎么描述、简历项目润色 |
+| [project-to-resume](./project-to-resume/) | 阅读全栈项目代码库，自动采集项目名称、git 项目地址、开发时间、技术栈与核心模块，一次生成可直接粘贴进简历的项目经历三版本（简洁/均衡/详细），落地为 Markdown 文件 | `/project-to-resume`、把项目写进简历、总结项目经历、生成简历项目描述、简历项目润色 |
 | [llm-wiki](./llm-wiki/) | 搭建与维护 Karpathy 方法论的 LLM Wiki 知识库（Obsidian vault）：三层架构 00-Raw/01-Wiki/02-Rules、页面模板、分类体系、Obsidian 配色与图谱配置，支持脚手架创建 + ingest/query/lint 维护 | LLM Wiki、创建知识库、obsidian 知识库、ingest 摄入资料、lint 知识库 |
 | [skill-usage](./skill-usage/) | 查询某个已安装 Skill 的用法：定位 SKILL.md 后按固定结构输出作用、触发方式、输入要求、流程、产出物、依赖与坑；也可列出全部已安装技能（含脚本 find_skill.py） | X 技能怎么用、/xxx 是干什么的、有哪些 skill |
 | [svg-logo](./svg-logo/) | 根据项目名称、目的、领域、受众综合设计 SVG logo 图标：设计简报 → 预设场景配色路线（10 场景 × 2 条，非黑白）→ 6 个差异化彩色变体（点阵/几何/线系/节点网络/字母融合）+ HTML 展示页（含深底预览）→ 收敛精修，交付主版本/深底版/单色回退/favicon，零 API 依赖，含多尺寸渲染验收脚本 | logo、标志、图标、icon、favicon、SVG 图标、设计个标志、logo 方案、配色方案 |
@@ -102,7 +102,7 @@ cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo
 
 ### 依赖
 
-简历类技能（resume-master / project-to-resume）需要 Python 依赖（PDF 拆图与页数统计）：
+简历技能 resume-master 需要 Python 依赖（PDF 拆图与页数统计）；project-to-resume 的扫描脚本仅用 Python 标准库，无需安装依赖：
 
 ```bash
 pip install pymupdf pypdf
