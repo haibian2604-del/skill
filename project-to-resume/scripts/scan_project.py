@@ -298,6 +298,55 @@ def detect_tech(root: Path) -> dict:
     return {"markers": markers, "frameworks": sorted(set(frameworks))}
 
 
+CODE_EXTS = {
+    ".ts": "TypeScript", ".tsx": "TypeScript", ".js": "JavaScript", ".jsx": "JavaScript",
+    ".mjs": "JavaScript", ".cjs": "JavaScript", ".py": "Python", ".go": "Go",
+    ".java": "Java", ".kt": "Kotlin", ".rs": "Rust", ".vue": "Vue",
+    ".svelte": "Svelte", ".php": "PHP", ".rb": "Ruby", ".swift": "Swift", ".cs": "C#",
+}
+TEST_DIR_NAMES = {"test", "tests", "__tests__", "spec", "e2e"}
+
+
+def is_test_file(name: str, parent: str) -> bool:
+    low = name.lower()
+    return (
+        ".test." in low or ".spec." in low or low.startswith("test_")
+        or low.endswith("_test.py") or low.endswith("_test.go")
+        or parent in TEST_DIR_NAMES
+    )
+
+
+def code_stats(root: Path, max_files: int = 20000) -> dict:
+    """统计各语言代码行数与测试文件数——总览条的量化数据直接来自这里。"""
+    loc: dict = {}
+    test_files = 0
+    source_files = 0
+    for path in root.rglob("*"):
+        if source_files >= max_files:
+            break
+        if not path.is_file() or path.suffix.lower() not in CODE_EXTS:
+            continue
+        rel = path.relative_to(root)
+        if any(part in SKIP_DIRS for part in rel.parts):
+            continue
+        try:
+            if path.stat().st_size > 2_000_000:
+                continue
+            lines = path.read_bytes().count(b"\n")
+        except OSError:
+            continue
+        source_files += 1
+        lang = CODE_EXTS[path.suffix.lower()]
+        loc[lang] = loc.get(lang, 0) + lines
+        if is_test_file(path.name, path.parent.name.lower()):
+            test_files += 1
+    return {
+        "loc_by_language": dict(sorted(loc.items(), key=lambda x: -x[1])),
+        "test_files": test_files,
+        "source_files": source_files,
+    }
+
+
 def detect_middleware(root: Path, max_files: int = 4000) -> list:
     hits: dict = {}
     exts = {".py", ".go", ".java", ".ts", ".js", ".tsx", ".jsx", ".yaml",
@@ -375,6 +424,7 @@ def main() -> int:
         "git": git_info(root),
         "tech_markers": tech["markers"],
         "frameworks": tech["frameworks"],
+        "scale": code_stats(root),
         "middleware": detect_middleware(root),
         "tree": build_tree(root, args.max_depth),
         "readme": read_readme(root, args.readme_lines),
@@ -416,6 +466,12 @@ def main() -> int:
     if not data["middleware"]:
         print("- (未在代码中发现明显引用)")
 
+    s = data["scale"]
+    print("\n## 规模统计（总览条量化数据直接来自这里）")
+    loc_str = ", ".join(f"{lang} {n} 行" for lang, n in s["loc_by_language"].items())
+    print(f"- 代码行: {loc_str or '(未统计到源码)'}")
+    print(f"- 测试文件: {s['test_files']} 个（源文件共 {s['source_files']} 个）")
+
     print(f"\n## 目录结构 (深度 ≤ {args.max_depth})")
     for line in data["tree"]:
         print(line)
@@ -431,7 +487,7 @@ def main() -> int:
             print(content)
 
     print("\n## 下一步")
-    print("1. 从目录结构挑 3-6 个核心模块，Read 路由/控制器/服务层/数据模型源码确认职责与技术亮点")
+    print("1. 从目录结构挑 3-6 个核心模块，Read 路由/控制器/服务层/数据模型源码，为每个核心点配对「问题 + 方法」")
     print("2. 填六要素：项目名称 / 项目地址 / 开发时间 / 技术栈 / 核心模块 / 核心点")
     print("3. 缺失信息一次性向用户追问；量化数据无来源时用 [待补充：xxx] 占位符")
     print("4. 按 references/writing-guide.md 的规格生成简洁版 / 均衡版 / 详细版")
