@@ -48,6 +48,8 @@ description: 一句话说明技能用途与触发时机
 | [skill-usage](./skill-usage/) | 查询某个已安装 Skill 的用法：定位 SKILL.md 后按固定结构输出作用、触发方式、输入要求、流程、产出物、依赖与坑；也可列出全部已安装技能（含脚本 find_skill.py） | X 技能怎么用、/xxx 是干什么的、有哪些 skill |
 | [svg-logo](./svg-logo/) | 根据项目名称、目的、领域、受众综合设计 SVG logo 图标：设计简报 → 预设场景配色路线（10 场景 × 2 条，非黑白）→ 6 个差异化彩色变体（点阵/几何/线系/节点网络/字母融合）+ HTML 展示页（含深底预览）→ 收敛精修，交付主版本/深底版/单色回退/favicon，零 API 依赖，含多尺寸渲染验收脚本 | logo、标志、图标、icon、favicon、SVG 图标、设计个标志、logo 方案、配色方案 |
 | [emotion-ball](./emotion-ball/) | 制作「会表达情绪的小球」——纯 SVG + 原生 JS 的零依赖表情引擎（32 种状态表情、emotionId 对接 AI、鼠标注视、自旋彩带、撒花），含可运行核心、脚手架脚本与行为断言测试台；可作 Agent 状态指示、桌面宠物、悬浮助手 | 情绪小球、表情球、AI 表情、桌面宠物、Agent 状态指示、emotionId、怎么做会表达情绪的小球 |
+| [job-prep](./job-prep/) | 求职目标管理：把「找工作/准备面试」变成有截止日期、可验证验收标准、7 天行动表（动作+日期+时长+判据+顺序）与固定复盘机制的 30 天计划；进度落后走「先诊断→砍范围/降标准/加时间」，任务冲突走「保关键路径→给取舍与沟通话术」 | 求职计划、目标管理、求职进度落后、面试准备计划、求职复盘、任务冲突取舍、/job-prep |
+| [google-java-style](./google-java-style/) | 按 Google Java Style Guide 编写与审查 Java 代码：核心规则内联（命名/格式/编程实践/Javadoc），细则拆 5 个参考文档按需读取，附标准文件骨架示例与逐项审查清单，大段重排可建议官方 google-java-format | 写 Java 代码、Java 代码规范、Google Java Style、Java 代码风格审查、Java 格式化 |
 
 ## 安装方式
 
@@ -80,7 +82,7 @@ cd skill
 
 # 2. 复制需要的技能到用户级技能目录（可一次复制多个）
 mkdir -p ~/.workbuddy/skills
-cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo ~/.workbuddy/skills/
+cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo job-prep google-java-style ~/.workbuddy/skills/
 ```
 
 ### 方式三：官方推荐市场安装
@@ -91,7 +93,7 @@ cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo
 
 ```bash
 cd skill && git pull
-cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo ~/.workbuddy/skills/
+cp -r resume-master project-to-resume llm-wiki skill-usage emotion-ball svg-logo job-prep google-java-style ~/.workbuddy/skills/
 ```
 
 或直接对 Agent 说：「更新 ~/.workbuddy/skills/ 里的 llm-wiki 技能，源仓库是 git@github.com:haibian2604-del/skill.git」。
