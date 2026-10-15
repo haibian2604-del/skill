@@ -10,7 +10,8 @@ description: 按 Google Java Style Guide 编写与审查 Java 代码：写新 Ja
 ## 工作流
 
 1. **写新 Java 代码**：直接套用下方「核心规则」与「标准文件骨架」。拿不准的具体构造（换行断点、switch、注解、text block）查 `references/formatting.md`。
-2. **审查/重构已有代码**：按「审查清单」逐项过，指出「违反哪条 + 怎么改」；条款细节查对应 reference。
+2. **审查 Java 项目**：先读项目结构——`find <项目> -name '*.java'` 加构建文件（pom.xml/build.gradle）、顶层目录——确定源码范围；**不确定哪些目录要不要纳入审查**（生成的代码、第三方拷贝、测试目录、多模块该审哪几个）时，先问用户再动手，不要自作主张全审或漏审。
+3. **审查/重构已有代码**：按「审查清单」逐项过，指出「违反哪条 + 怎么改」；条款细节查对应 reference。
 3. **大段代码需要重排格式**：建议先跑官方格式化工具 google-java-format（见文末），再人工核对它管不了的语义性规则（命名、@Override、异常处理、Javadoc 内容）。
 
 ## 按需读取
@@ -104,6 +105,14 @@ public final class OrderParser {
 3. **命名**（references/naming.md）：各类标识符大小写；可变对象误用 UPPER_SNAKE_CASE；局部 final 变量按常量风格写；驼峰转换（缩写词）。
 4. **编程实践**（references/programming-practices.md）：@Override 缺失；吞异常；静态成员用实例限定；finalize；switch 不穷尽；fall-through 无注释。
 5. **Javadoc**（references/javadoc.md）：可见成员缺失文档；summary 写成完整句子或 "This method returns ..."；block tag 顺序（`@param` `@return` `@throws` `@deprecated`）与空描述。
+
+## 审查汇总
+
+审完必须按优先级汇总给用户，每条带 `文件:行号 + 违反哪条 + 怎么改`：
+
+- **P0 必改**——会咬人的语义问题：吞掉的异常、不穷尽的 switch、finalizer、可变对象冒充常量。
+- **P1 应改**——结构性规范：命名、通配符/module import、文件结构、修饰符顺序、可见成员缺 Javadoc。
+- **P2 建议**——纯格式：缩进、列宽、大括号、空行；条目多时不逐条列，建议直接跑 google-java-format 后人工复核。
 
 ## 自动格式化
 
